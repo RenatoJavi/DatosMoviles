@@ -1,9 +1,12 @@
+import 'package:app_prueba_1/dominio/entidades/message.dart';
+import 'package:app_prueba_1/presentaciones/providers/chat_provider.dart';
 import 'package:app_prueba_1/presentaciones/widgets/chat/my_message.dart';
 import 'package:app_prueba_1/presentaciones/widgets/chat/she_mensaje.dart';
 import 'package:app_prueba_1/presentaciones/widgets/compartidos/mensajes_box.dart';
 import 'package:flutter/material.dart';
 
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen({super.key});
@@ -59,6 +62,9 @@ class _ChatVista extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //aqui agrego  mi instancia de ChatProvider
+    final chatProvider = context.watch<ChatProvider>();
+    //  final leerMensaje = context.read<ChatProvider>();
     return SafeArea(
       // left: false,
       child: Padding(
@@ -69,21 +75,31 @@ class _ChatVista extends StatelessWidget {
             //Expanded(child: Container(color: Colors.amber)),
             Expanded(
               child: ListView.builder(
-                itemCount: 100,
+                controller: chatProvider.chatScrolContrador,
+
+                //itemCount: 100,
+                itemCount: chatProvider.mensajesLista.length,
                 itemBuilder: (context, index) {
+                  final messaje = chatProvider.mensajesLista[index];
+                  return (messaje.fromQuien == FromQuien.ella)
+                      ? SheMensaje()
+                      : MyMessage(message: messaje);
+
                   // return Text('Indice : $index');
-                  return (index %2== 0)? SheMensaje() :  MyMessage();
+                  //return (index % 2 == 0) ? SheMensaje() : MyMessage();
                 },
               ),
             ),
             //caja de texto
-            MensajesBox(),
-           // Text('Ibarra'),
+            MensajesBox(onValue: (value) => chatProvider.sendMensaje(value)),
+            // Text('Ibarra'),
           ],
         ),
       ),
     );
   }
+
+ 
 }
 
 /* class _ChatVista extends StatelessWidget {

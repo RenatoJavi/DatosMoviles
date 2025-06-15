@@ -22,7 +22,7 @@ class AppTheme {
       );
 
   ThemeData theme() {
-    // TODO: implement ThemeData
+    
     ColorScheme.fromSeed(
       seedColor: Colors.teal, // Color base para generar el esquema
       brightness: Brightness.light, // Tema claro
